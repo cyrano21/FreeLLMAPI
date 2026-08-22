@@ -14,6 +14,9 @@ server/data/
 .env
 .env.local
 .DS_Store
+*.log
+nssm.exe
+freellmapi.config.json
 
 # TypeScript incremental build cache
 *.tsbuildinfo
