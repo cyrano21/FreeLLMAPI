@@ -7,17 +7,19 @@ WORKDIR /app
 # better-sqlite3 is a native module; on slim images without a usable prebuilt
 # binary (notably the linux/arm64 leg under QEMU) it compiles from source via
 # node-gyp, which needs Python + a C++ toolchain. These live only in the build
-# stages — the runtime image copies the already-compiled node_modules.
+# stages - the runtime image copies the already-compiled node_modules.
 RUN apt-get update \
   && apt-get install -y --no-install-recommends python3 make g++ \
   && rm -rf /var/lib/apt/lists/*
 
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json ./ 
 COPY shared/package.json ./shared/
 COPY server/package.json ./server/
 COPY client/package.json ./client/
 COPY cli/package.json ./cli/
 
+# Ensure devDependencies are installed for TypeScript build
+ENV NODE_ENV=development
 RUN npm ci
 
 FROM deps AS build
