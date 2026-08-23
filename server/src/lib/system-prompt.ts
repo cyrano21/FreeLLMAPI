@@ -55,6 +55,10 @@ interface ProfileRow {
  */
 export function resolveAuth(token: string | undefined): ResolvedAuth | null {
   if (!token) return null;
+  const envKey = process.env.FREELLMAPI_API_KEY || process.env.UNIFIED_API_KEY;
+  if (envKey && timingSafeStringEqual(token, envKey)) {
+    return { kind: 'unified', systemPrompt: null };
+  }
   if (timingSafeStringEqual(token, getUnifiedApiKey())) {
     return { kind: 'unified', systemPrompt: null };
   }
